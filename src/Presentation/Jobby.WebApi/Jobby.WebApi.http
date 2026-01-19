@@ -1,0 +1,6 @@
+@Jobby.WebApi_HostAddress = http://localhost:5067
+
+GET {{Jobby.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

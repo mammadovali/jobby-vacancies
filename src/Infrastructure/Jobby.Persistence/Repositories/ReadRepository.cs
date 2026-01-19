@@ -1,0 +1,58 @@
+﻿using Jobby.Application.Repositories;
+using Jobby.Domain.Entities.Common;
+using Jobby.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+
+namespace Jobby.Persistence.Repositories
+{
+    public class ReadRepository<T> : IReadRepository<T> where T : Entity
+    {
+        private readonly ApplicationDbContext _context;
+
+        public ReadRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public DbSet<T> Table => _context.Set<T>();
+
+        public IQueryable<T> GetAll(bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+            return query;
+        }
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> method, Func<IQueryable<T>, IQueryable<T>> include = null, bool tracking = true)
+        {
+            var query = Table.Where(method).OrderByDescending(o => o.CreatedDate).AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+            if (include is not null)
+                query = include(query);
+            return query;
+        }
+        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> method, Func<IQueryable<T>, IQueryable<T>> include = null, bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+            if (include is not null)
+                query = include(query);
+
+            return await query.FirstOrDefaultAsync(method);
+        }
+
+        public async Task<T> GetByIdAsync(int id, Func<IQueryable<T>, IQueryable<T>> include = null, bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = Table.AsNoTracking();
+            if (include is not null)
+                query = include(query);
+
+            return await query.FirstOrDefaultAsync(data => data.Id == id && !data.IsDeleted);
+        }
+    }
+}
