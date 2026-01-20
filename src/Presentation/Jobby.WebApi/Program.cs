@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 
@@ -70,6 +70,13 @@ builder.Logging.ClearProviders();
 
 builder.Services.AddSwaggerGen(c =>
 {
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Jobby API",
+        Version = "v1",
+        Description = "Jobby API Documentation"
+    });
+
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "JWT Authentication",
@@ -132,7 +139,10 @@ builder.Services.AddAuthentication(opt =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JWT:SecretKey").Value)),
 
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero,
+
+        NameClaimType = ClaimTypes.Name,
+        RoleClaimType = ClaimTypes.Role
     };
     opt.Events = new JwtBearerEvents()
     {
@@ -144,14 +154,13 @@ builder.Services.AddAuthentication(opt =>
 
         OnTokenValidated = context =>
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = context.SecurityToken as JwtSecurityToken;
+            /*  var tokenHandler = new JwtSecurityTokenHandler();
+              var token = context.SecurityToken as JwtSecurityToken;
 
-            if (token == null || token.ValidTo < DateTime.UtcNow) // Token expired?
-            {
-                context.Fail("Token has expired.");
-            }
-
+              if (token == null || token.ValidTo < DateTime.UtcNow) // Token expired?
+              {
+                  context.Fail("Token has expired.");
+              }*/
 
             return Task.CompletedTask;
         },
@@ -168,7 +177,6 @@ builder.Services.AddAuthentication(opt =>
     };
 }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 
-builder.Services.AddAuthorization();
 
 var env = builder.Environment;
 
@@ -182,15 +190,6 @@ builder.Configuration
 var app = builder.Build();
 
 app.UseMiddlewares();
-
-/*app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Jobby.API V1");
-    c.DocumentTitle = "Jobby API";
-    c.DocExpansion(DocExpansion.List);
-});
-app.UseDeveloperExceptionPage();*/
 
 if (app.Environment.IsDevelopment())
 {
@@ -212,12 +211,7 @@ app.Use(async (context, next) =>
     await next();
 });
 
-/*app.UseStaticFiles(new StaticFileOptions
-{
-    RequestPath = "/files"
-});
-*/
-app.UseSerilogRequestLogging();
+
 app.UseHttpLogging();
 app.UseCors("AllowAllOrigins");
 

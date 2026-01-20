@@ -24,7 +24,7 @@ namespace Jobby.Application.Features.Commands.Auth.Create
         {
             var user = await _readRepository.GetSingleAsync(x => x.Email.ToLower() == request.Email.ToLower());
             if (user == null || !PasswordHasher.VerifyPassword(request.Password, user.PasswordHash) || user.IsDeleted)
-                throw new UnAuthorizedException("Invalid Credentials");
+                throw new UnAuthorizedException("Email və ya şifrə yanlışdır");
 
 
             var randomNum = GenerateRandomNumber();

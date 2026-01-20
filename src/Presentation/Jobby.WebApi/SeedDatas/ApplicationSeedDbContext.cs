@@ -32,7 +32,7 @@ namespace Jobby.WebApi.SeedDatas
                     PasswordHasher.HashPassword("jobby$admin!")
                 );
 
-                user1.SetProfile("İmtahan Admin");
+                user1.SetProfile("Jobby Admin");
                 await context.Users.AddAsync(user1);
             }
             await context.SaveChangesAsync();

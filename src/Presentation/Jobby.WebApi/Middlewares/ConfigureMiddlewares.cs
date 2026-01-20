@@ -1,4 +1,6 @@
-﻿namespace Jobby.WebApi.Middlewares
+﻿using Microsoft.AspNetCore.Authentication;
+
+namespace Jobby.WebApi.Middlewares
 {
     public static class ConfigureMiddlewares
     {
