@@ -191,17 +191,16 @@ var app = builder.Build();
 
 app.UseMiddlewares();
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Jobby.API V1");
-        c.DocumentTitle = "Jobby API";
-        c.DocExpansion(DocExpansion.List);
-    });
-    //app.UseDeveloperExceptionPage();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Jobby API v1");
+    c.RoutePrefix = "swagger"; // explicit, safe
+    c.DocumentTitle = "Jobby API";
+    c.DocExpansion(DocExpansion.List);
+});
+
 
 app.Use(async (context, next) =>
 {
@@ -234,5 +233,5 @@ using (var scope = app.Services.CreateScope())
     await seed.SeedAsync(context, logger);
 }
 
-app.MapFallbackToFile("index.html");
+//app.MapFallbackToFile("index.html");
 app.Run();
