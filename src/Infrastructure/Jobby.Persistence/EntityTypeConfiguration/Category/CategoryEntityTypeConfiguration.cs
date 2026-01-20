@@ -14,9 +14,6 @@ namespace Jobby.Persistence.EntityTypeConfiguration.Category
                    .IsRequired()
                    .HasMaxLength(100);
 
-            builder.Property(c => c.IsActive)
-                   .HasDefaultValue(true);
-
             builder.HasMany(c => c.Vacancies)
                    .WithOne(v => v.Category)
                    .HasForeignKey(v => v.CategoryId)
