@@ -8,8 +8,6 @@ namespace Jobby.Domain.Entities.CategoryAggregate
         public string Name { get; private set; }
         public bool IsActive { get; private set; }
 
-        //public List<Vacancy> Vacancies { get; set; }
-
         public void SetDetails(string name, bool isActive)
         {
             Name = name;
