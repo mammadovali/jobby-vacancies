@@ -19,7 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "OralExam.Production": {
+    "Jobby.Production": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
