@@ -48,6 +48,11 @@ namespace Jobby.WebApi.Middlewares
                     problemDetails.Detail = ex.Message;
                     problemDetails.Title = "Not Found";
                     break;
+                case BadRequestException:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    problemDetails.Detail = ex.Message;
+                    problemDetails.Title = "Bad request";
+                    break;
                 case UnAuthorizedException exc:
                     response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     problemDetails.Detail = exc.Message;

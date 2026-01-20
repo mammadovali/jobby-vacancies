@@ -1,4 +1,6 @@
-﻿using Jobby.Domain.Entities.Identity;
+﻿using Jobby.Domain.Entities.CategoryAggregate;
+using Jobby.Domain.Entities.Identity;
+using Jobby.Domain.Entities.VacancyAggragate;
 using Microsoft.EntityFrameworkCore;
 
 namespace Jobby.Persistence.Context
@@ -9,6 +11,8 @@ namespace Jobby.Persistence.Context
         { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Vacancy> Vacancies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
