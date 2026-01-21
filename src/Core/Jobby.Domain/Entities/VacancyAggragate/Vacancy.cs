@@ -13,7 +13,8 @@ namespace Jobby.Domain.Entities.VacancyAggragate
         public bool IsActive { get; private set; } = true!;
 
         public Category Category { get; private set; }
-        //public ICollection<Question> Questions { get; private set; } = new List<Question>();
+
+        public ICollection<QuestionAggregate.Question> Questions { get; private set; } = new List<QuestionAggregate.Question>();
 
         protected Vacancy() { }
 
@@ -27,11 +28,12 @@ namespace Jobby.Domain.Entities.VacancyAggragate
             SetAuditDetails(createdById);
         }
 
-        public void SetDetails(string title, string description, bool isActive, int updatedById)
+        public void SetDetails(string title, string description, bool isActive, int categoryId, int updatedById)
         {
             Title = title;
             Description = description;
             IsActive = isActive;
+            CategoryId = categoryId;
             SetEditFields(updatedById);
         }
     }

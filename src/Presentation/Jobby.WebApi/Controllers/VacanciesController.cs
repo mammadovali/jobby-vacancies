@@ -19,7 +19,7 @@ namespace Jobby.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var result = await Mediator.Send(new GetVacancyByIdQuery(id));
             return Ok(result);
@@ -35,7 +35,7 @@ namespace Jobby.WebApi.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateVacancyCommand command)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateVacancyCommand command)
         {
             command.Id = id;
             var response = await Mediator.Send(command);
@@ -44,7 +44,7 @@ namespace Jobby.WebApi.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var response = await Mediator.Send(new DeleteVacancyCommand(id));
             return Ok(response);

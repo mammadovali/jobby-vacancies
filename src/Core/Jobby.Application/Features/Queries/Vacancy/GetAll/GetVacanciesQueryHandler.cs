@@ -20,7 +20,12 @@ namespace Jobby.Application.Features.Queries.Vacancy.GetAll
         }
         public async Task<AllDto<VacancyDto>> Handle(GetVacanciesQuery request, CancellationToken cancellationToken)
         {
-            var vacancies = _readRepository.GetWhere(l => !l.IsDeleted);
+            var vacancies = _readRepository.GetWhere(v => !v.IsDeleted, include => include.Include(v => v.Category));
+
+            if (request.CategoryId.HasValue)
+            {
+                vacancies = vacancies.Where(v => v.CategoryId == request.CategoryId.Value);
+            }
 
             vacancies = vacancies.ApplySortingAndFiltering(request.ColumnName, request.OrderBy, request.FilterValue);
 

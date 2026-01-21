@@ -28,7 +28,7 @@ namespace Jobby.Application.Features.Commands.Vacancy.Update
             if (vacancy is null)
                 throw new BadRequestException("Vakansiya tapılmadı");
 
-            vacancy.SetDetails(request.Title, request.Description, request.IsActive, userId);
+            vacancy.SetDetails(request.Title, request.Description, request.IsActive, request.CategoryId, userId);
 
             _writeRepository.Update(vacancy);
             await _writeRepository.SaveAsync();

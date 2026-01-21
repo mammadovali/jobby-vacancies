@@ -6,6 +6,7 @@ namespace Jobby.Application.Features.Queries.Vacancy.GetAll
 {
     public class GetVacanciesQuery : IRequest<AllDto<VacancyDto>>
     {
+        public int? CategoryId { get; set; }
         public string? FilterValue { get; set; }
         public string? ColumnName { get; set; }
         public string? OrderBy { get; set; }

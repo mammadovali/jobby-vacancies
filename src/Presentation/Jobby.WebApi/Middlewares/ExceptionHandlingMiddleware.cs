@@ -53,6 +53,11 @@ namespace Jobby.WebApi.Middlewares
                     problemDetails.Detail = ex.Message;
                     problemDetails.Title = "Bad request";
                     break;
+                case BusinessException:
+                    response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
+                    problemDetails.Detail = ex.Message;
+                    problemDetails.Title = "Business error";
+                    break;
                 case UnAuthorizedException exc:
                     response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     problemDetails.Detail = exc.Message;
