@@ -9,6 +9,9 @@ namespace Jobby.Application.Features.Commands.Question.Create
             RuleFor(x => x.VacancyId)
                 .GreaterThan(0).WithMessage("Vakansiya ID 0 dan böyük olmalıdır");
 
+            RuleFor(x => x.Order)
+                .GreaterThan(0).WithMessage("Sıra nömrəsi 0 dan böyük olmalıdır");
+
             RuleFor(x => x.Text)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Sual boş ola bilməz")
