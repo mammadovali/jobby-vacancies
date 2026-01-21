@@ -15,7 +15,7 @@ namespace Jobby.Domain.Entities.VacancyAggragate
         public Category Category { get; private set; }
         //public ICollection<Question> Questions { get; private set; } = new List<Question>();
 
-        protected Vacancy() { } // EF Core üçün
+        protected Vacancy() { }
 
         public Vacancy(int categoryId, string title, string description, int createdById)
         {
@@ -27,22 +27,11 @@ namespace Jobby.Domain.Entities.VacancyAggragate
             SetAuditDetails(createdById);
         }
 
-        public void Update(string title, string description, int updatedById)
+        public void SetDetails(string title, string description, bool isActive, int updatedById)
         {
             Title = title;
             Description = description;
-            SetEditFields(updatedById);
-        }
-
-        public void Activate(int updatedById)
-        {
-            IsActive = true;
-            SetEditFields(updatedById);
-        }
-
-        public void Deactivate(int updatedById)
-        {
-            IsActive = false;
+            IsActive = isActive;
             SetEditFields(updatedById);
         }
     }
