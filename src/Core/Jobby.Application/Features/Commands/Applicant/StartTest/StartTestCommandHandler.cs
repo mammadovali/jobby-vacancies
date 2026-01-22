@@ -43,7 +43,7 @@ namespace Jobby.Application.Features.Commands.Applicant.StartTest
             await _progressWriteRepository.AddAsync(progress);
             await _progressWriteRepository.SaveAsync();
 
-            var questionDto = await _mapper.Map<Task<QuestionApplicantDto>>(firstQuestion);
+            var questionDto = _mapper.Map<QuestionApplicantDto>(firstQuestion);
             questionDto.TimeLeftSeconds = 60;
 
             return questionDto;

@@ -83,7 +83,7 @@ namespace Jobby.Application.Features.Commands.Applicant.SubmitAnswer
             // 5️. If there is a next question, create progress for it
             var nextQuestion = await GetNextQuestionAsync(request.QuestionId, request.ApplicantId);
 
-            var nextQuestionDto = await _mapper.Map<Task<QuestionApplicantDto>>(nextQuestion);
+            var nextQuestionDto = _mapper.Map<QuestionApplicantDto>(nextQuestion);
 
             if (nextQuestion != null)
             {
