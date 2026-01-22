@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Jobby.Application.Exceptions;
 using Jobby.Application.Features.Commands.Applicant.DTOs;
-using Jobby.Application.Features.Queries.Question.DTOs;
-using Jobby.Application.Repositories;
 using Jobby.Application.Repositories.Applicant;
 using Jobby.Application.Repositories.Question;
 using Jobby.Domain.Entities.ApplicantAggregate;
@@ -40,12 +38,6 @@ namespace Jobby.Application.Features.Commands.Applicant.StartTest
 
             if (firstQuestion == null)
                 throw new BadRequestException("Bu vakansiya üçün sual tapılmadı");
-
-            bool isApplied = await _applicantReadRepository
-                .GetWhere(a => a.VacancyId == applicant.VacancyId && a.Email == applicant.Email).AnyAsync(cancellationToken);
-
-            if (isApplied)
-                throw new BadRequestException("Siz artıq bu vakansiya üçün müraciət etmisiniz");
 
             var progress = new ApplicantQuestionProgress(applicant.Id, firstQuestion.Id);
             await _progressWriteRepository.AddAsync(progress);
