@@ -34,7 +34,8 @@ namespace Jobby.Application.Features.Commands.Applicant.StartTest
             var applicant = await _applicantReadRepository.GetByIdAsync(request.ApplicantId);
 
             var firstQuestion = await _questionReadRepository
-                .GetSingleAsync(q => q.VacancyId == applicant.VacancyId, q => q.OrderBy(q => q.Order));
+                .GetSingleAsync(q => q.VacancyId == applicant.VacancyId,
+                q => q.OrderBy(q => q.Order).Include(q => q.Options));
 
             if (firstQuestion == null)
                 throw new BadRequestException("Bu vakansiya üçün sual tapılmadı");
