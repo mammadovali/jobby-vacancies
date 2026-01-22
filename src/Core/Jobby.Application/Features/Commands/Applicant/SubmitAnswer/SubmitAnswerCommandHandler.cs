@@ -127,7 +127,8 @@ namespace Jobby.Application.Features.Commands.Applicant.SubmitAnswer
                 .GetSingleAsync(q =>
                     q.VacancyId == currentQuestion.VacancyId &&
                     q.Order > currentQuestion.Order &&
-                    !answeredQuestionIds.Contains(q.Id), include => include.OrderBy(q => q.Order));
+                    !answeredQuestionIds.Contains(q.Id),
+                    include => include.OrderBy(q => q.Order).Include(q => q.Options));
         }
     }
 
