@@ -40,12 +40,6 @@ namespace Jobby.Application.Features.Commands.Applicant.FinishTest
             if (applicant == null)
                 throw new NotFoundException("Namizəd tapılmadı");
 
-            bool isApplied = await _applicantReadRepo
-                .GetWhere(a => a.VacancyId == applicant.VacancyId && a.Email == applicant.Email).AnyAsync(cancellationToken);
-
-            if (isApplied)
-                throw new BadRequestException("Siz artıq bu vakansiya üçün müraciət etmisiniz");
-
             // 2️. Get Answers
             var answers = await _answerReadRepo
                 .GetWhere(a => a.ApplicantId == request.ApplicantId)

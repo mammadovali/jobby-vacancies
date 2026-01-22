@@ -1,4 +1,5 @@
-﻿using Jobby.Application.Exceptions;
+﻿using AutoMapper;
+using Jobby.Application.Exceptions;
 using Jobby.Application.Features.Commands.Applicant.DTOs;
 using Jobby.Application.Repositories.Applicant;
 using Jobby.Application.Repositories.Question;
@@ -16,6 +17,7 @@ namespace Jobby.Application.Features.Commands.Applicant.SubmitAnswer
         private readonly IApplicantQuestionProgressWriteRepository _progressWriteRepo;
         private readonly IQuestionReadRepository _questionReadRepo;
         private readonly IQuestionOptionReadRepository _optionReadRepo;
+        private readonly IMapper _mapper;
 
         public SubmitAnswerCommandHandler(
             IApplicantAnswerWriteRepository answerWriteRepo,
@@ -23,7 +25,8 @@ namespace Jobby.Application.Features.Commands.Applicant.SubmitAnswer
             IApplicantQuestionProgressReadRepository progressReadRepo,
             IApplicantQuestionProgressWriteRepository progressWriteRepo,
             IQuestionReadRepository questionReadRepo,
-            IQuestionOptionReadRepository optionReadRepo)
+            IQuestionOptionReadRepository optionReadRepo,
+            IMapper mapper)
         {
             _answerWriteRepo = answerWriteRepo;
             _answerReadRepo = answerReadRepo;
@@ -31,6 +34,7 @@ namespace Jobby.Application.Features.Commands.Applicant.SubmitAnswer
             _progressWriteRepo = progressWriteRepo;
             _questionReadRepo = questionReadRepo;
             _optionReadRepo = optionReadRepo;
+            _mapper = mapper;
         }
 
         public async Task<SubmitAnswerResultDto> Handle(SubmitAnswerCommand request,  CancellationToken cancellationToken)
@@ -79,6 +83,8 @@ namespace Jobby.Application.Features.Commands.Applicant.SubmitAnswer
             // 5️. If there is a next question, create progress for it
             var nextQuestion = await GetNextQuestionAsync(request.QuestionId, request.ApplicantId);
 
+            var nextQuestionDto = await _mapper.Map<Task<QuestionApplicantDto>>(nextQuestion);
+
             if (nextQuestion != null)
             {
                 var nextProgress = new ApplicantQuestionProgress(
@@ -91,7 +97,7 @@ namespace Jobby.Application.Features.Commands.Applicant.SubmitAnswer
                 return new SubmitAnswerResultDto
                 {
                     IsFinished = false,
-                    NextQuestionId = nextQuestion.Id
+                    NextQuestion = nextQuestionDto
                 };
             }
 
