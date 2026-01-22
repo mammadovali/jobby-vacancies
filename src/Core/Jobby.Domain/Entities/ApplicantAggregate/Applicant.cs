@@ -1,7 +1,6 @@
 ﻿using Jobby.Domain.Entities.Common;
 using Jobby.Domain.Entities.Identity;
 using Jobby.Domain.Entities.VacancyAggragate;
-using System.IO;
 
 namespace Jobby.Domain.Entities.ApplicantAggregate
 {

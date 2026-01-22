@@ -1,5 +1,6 @@
 ﻿using Jobby.Domain.Entities.Common;
 using Jobby.Domain.Entities.Identity;
+using Jobby.Domain.Entities.VacancyAggragate;
 
 namespace Jobby.Domain.Entities.ApplicantAggregate
 {
@@ -18,12 +19,12 @@ namespace Jobby.Domain.Entities.ApplicantAggregate
 
         protected TestResult() { }
 
-        public TestResult(int applicantId, int totalQuestions, int correctAnswers, int wrongAnswers)
+        public TestResult(int applicantId, int totalQuestions, int correctAnswers)
         {
             ApplicantId = applicantId;
             TotalQuestions = totalQuestions;
             CorrectAnswers = correctAnswers;
-            WrongAnswers = wrongAnswers;
+            WrongAnswers = TotalQuestions - CorrectAnswers;
 
             ScorePercent = totalQuestions == 0
                 ? 0
