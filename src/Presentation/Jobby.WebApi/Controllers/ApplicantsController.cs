@@ -9,7 +9,7 @@ namespace Jobby.WebApi.Controllers
     public class ApplicantsController : BaseApiController
     {
         [HttpPost]
-        public async Task<IActionResult> CreateExam([FromForm] CreateApplicantCommand command)
+        public async Task<IActionResult> Create([FromForm] CreateApplicantCommand command)
         {
             var response = await Mediator.Send(command);
             return Ok(response);
@@ -29,7 +29,7 @@ namespace Jobby.WebApi.Controllers
             return Ok(question);
         }
 
-        [HttpPost]
+        [HttpPost("finish-test")]
         public async Task<IActionResult> FinishTest([FromBody] FinishTestCommand command)
         {
             var result = await Mediator.Send(command);
