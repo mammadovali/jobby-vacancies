@@ -1,4 +1,5 @@
-﻿using Jobby.Persistence.Context;
+﻿using Jobby.Application.Repositories.Question;
+using Jobby.Persistence.Context;
 
 namespace Jobby.Persistence.Repositories.QuestionOption
 {
