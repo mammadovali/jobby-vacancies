@@ -3,6 +3,7 @@ using System;
 using Jobby.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jobby.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260122062128_ApplicantEntityAdded")]
+    partial class ApplicantEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,202 +89,10 @@ namespace Jobby.Persistence.Migrations
                     b.HasKey("Id")
                         .HasName("pk_applicants");
 
-                    b.HasIndex("VacancyId", "Email")
-                        .IsUnique()
-                        .HasDatabaseName("ix_applicants_vacancy_id_email");
+                    b.HasIndex("VacancyId")
+                        .HasDatabaseName("ix_applicants_vacancy_id");
 
                     b.ToTable("applicants", (string)null);
-                });
-
-            modelBuilder.Entity("Jobby.Domain.Entities.ApplicantAggregate.ApplicantAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("AnsweredAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("answered_at");
-
-                    b.Property<int>("ApplicantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("applicant_id");
-
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by_id");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
-
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_correct");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("question_id");
-
-                    b.Property<int?>("QuestionOptionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("question_option_id");
-
-                    b.Property<int?>("UpdatedById")
-                        .HasColumnType("integer")
-                        .HasColumnName("updated_by_id");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_date");
-
-                    b.HasKey("Id")
-                        .HasName("pk_applicant_answers");
-
-                    b.HasIndex("QuestionId")
-                        .HasDatabaseName("ix_applicant_answers_question_id");
-
-                    b.HasIndex("QuestionOptionId")
-                        .HasDatabaseName("ix_applicant_answers_question_option_id");
-
-                    b.HasIndex("ApplicantId", "QuestionId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_applicant_answers_applicant_id_question_id");
-
-                    b.ToTable("applicant_answers", (string)null);
-                });
-
-            modelBuilder.Entity("Jobby.Domain.Entities.ApplicantAggregate.ApplicantQuestionProgress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApplicantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("applicant_id");
-
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by_id");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
-
-                    b.Property<bool>("IsAnswered")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_answered");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<DateTime>("QuestionExpiresAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("question_expires_at");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("question_id");
-
-                    b.Property<DateTime>("QuestionStartedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("question_started_at");
-
-                    b.Property<int?>("UpdatedById")
-                        .HasColumnType("integer")
-                        .HasColumnName("updated_by_id");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_date");
-
-                    b.HasKey("Id")
-                        .HasName("pk_applicant_question_progresses");
-
-                    b.HasIndex("QuestionId")
-                        .HasDatabaseName("ix_applicant_question_progresses_question_id");
-
-                    b.HasIndex("ApplicantId", "QuestionId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_applicant_question_progresses_applicant_id_question_id");
-
-                    b.ToTable("applicant_question_progresses", (string)null);
-                });
-
-            modelBuilder.Entity("Jobby.Domain.Entities.ApplicantAggregate.TestResult", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApplicantId")
-                        .HasColumnType("integer")
-                        .HasColumnName("applicant_id");
-
-                    b.Property<DateTime>("CompletedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("completed_at");
-
-                    b.Property<int>("CorrectAnswers")
-                        .HasColumnType("integer")
-                        .HasColumnName("correct_answers");
-
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by_id");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<decimal>("ScorePercent")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("numeric(5,2)")
-                        .HasColumnName("score_percent");
-
-                    b.Property<int>("TotalQuestions")
-                        .HasColumnType("integer")
-                        .HasColumnName("total_questions");
-
-                    b.Property<int?>("UpdatedById")
-                        .HasColumnType("integer")
-                        .HasColumnName("updated_by_id");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_date");
-
-                    b.Property<int>("WrongAnswers")
-                        .HasColumnType("integer")
-                        .HasColumnName("wrong_answers");
-
-                    b.HasKey("Id")
-                        .HasName("pk_test_results");
-
-                    b.HasIndex("ApplicantId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_test_results_applicant_id");
-
-                    b.ToTable("test_results", (string)null);
                 });
 
             modelBuilder.Entity("Jobby.Domain.Entities.CategoryAggregate.Category", b =>
@@ -462,8 +273,8 @@ namespace Jobby.Persistence.Migrations
                     b.HasKey("Id")
                         .HasName("pk_question_options");
 
-                    b.HasIndex("QuestionId", "IsCorrect")
-                        .HasDatabaseName("ix_question_options_question_id_is_correct");
+                    b.HasIndex("QuestionId")
+                        .HasDatabaseName("ix_question_options_question_id");
 
                     b.ToTable("question_options", (string)null);
                 });
@@ -536,68 +347,6 @@ namespace Jobby.Persistence.Migrations
                         .HasConstraintName("fk_applicants_vacancies_vacancy_id");
 
                     b.Navigation("Vacancy");
-                });
-
-            modelBuilder.Entity("Jobby.Domain.Entities.ApplicantAggregate.ApplicantAnswer", b =>
-                {
-                    b.HasOne("Jobby.Domain.Entities.ApplicantAggregate.Applicant", "Applicant")
-                        .WithMany()
-                        .HasForeignKey("ApplicantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_applicant_answers_applicants_applicant_id");
-
-                    b.HasOne("Jobby.Domain.Entities.QuestionAggregate.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_applicant_answers_questions_question_id");
-
-                    b.HasOne("Jobby.Domain.Entities.QuestionAggregate.QuestionOption", "QuestionOption")
-                        .WithMany()
-                        .HasForeignKey("QuestionOptionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_applicant_answers_question_options_question_option_id");
-
-                    b.Navigation("Applicant");
-
-                    b.Navigation("Question");
-
-                    b.Navigation("QuestionOption");
-                });
-
-            modelBuilder.Entity("Jobby.Domain.Entities.ApplicantAggregate.ApplicantQuestionProgress", b =>
-                {
-                    b.HasOne("Jobby.Domain.Entities.ApplicantAggregate.Applicant", "Applicant")
-                        .WithMany()
-                        .HasForeignKey("ApplicantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_applicant_question_progresses_applicants_applicant_id");
-
-                    b.HasOne("Jobby.Domain.Entities.QuestionAggregate.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_applicant_question_progresses_questions_question_id");
-
-                    b.Navigation("Applicant");
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("Jobby.Domain.Entities.ApplicantAggregate.TestResult", b =>
-                {
-                    b.HasOne("Jobby.Domain.Entities.ApplicantAggregate.Applicant", "Applicant")
-                        .WithMany()
-                        .HasForeignKey("ApplicantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_test_results_applicants_applicant_id");
-
-                    b.Navigation("Applicant");
                 });
 
             modelBuilder.Entity("Jobby.Domain.Entities.QuestionAggregate.Question", b =>

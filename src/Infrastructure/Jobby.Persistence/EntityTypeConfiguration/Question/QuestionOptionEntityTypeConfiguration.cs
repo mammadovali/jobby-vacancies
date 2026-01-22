@@ -17,6 +17,8 @@ namespace Jobby.Persistence.EntityTypeConfiguration.Question
 
             builder.Property(o => o.IsCorrect)
                    .IsRequired();
+
+            builder.HasIndex(x => new { x.QuestionId, x.IsCorrect });
         }
     }
 
