@@ -3,6 +3,7 @@ using Jobby.Application.Features.Commands.Category.Delete;
 using Jobby.Application.Features.Commands.Category.Update;
 using Jobby.Application.Features.Queries.Category.GetAll;
 using Jobby.Application.Features.Queries.Category.GetById;
+using Jobby.Application.Features.Queries.Category.GetSuccessRate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +49,14 @@ namespace Jobby.WebApi.Controllers
         {
             var response = await Mediator.Send(new DeleteCategoryCommand(id));
             return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("success-rates")]
+        public async Task<IActionResult> GetCategorySuccessRates()
+        {
+            var result = await Mediator.Send(new GetCategorySuccessRatesQuery());
+            return Ok(result);
         }
     }
 }

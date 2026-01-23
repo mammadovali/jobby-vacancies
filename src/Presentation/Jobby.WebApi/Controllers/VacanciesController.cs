@@ -52,9 +52,9 @@ namespace Jobby.WebApi.Controllers
         }
 
         [HttpGet("top")]
-        public async Task<IActionResult> GetTopVacancies(int topCountPerCategory)
+        public async Task<IActionResult> GetTopVacancies(int topCount)
         {
-            var result = await Mediator.Send(new GetTopVacanciesQuery(topCountPerCategory));
+            var result = await Mediator.Send(new GetTopVacanciesQuery(topCount));
             return Ok(result);
         }
 

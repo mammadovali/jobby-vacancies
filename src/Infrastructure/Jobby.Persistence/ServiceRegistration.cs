@@ -1,9 +1,11 @@
 ﻿using Jobby.Application.Interfaces.Identity;
 using Jobby.Application.Interfaces.Storage;
 using Jobby.Application.Repositories;
+using Jobby.Application.Repositories.Dashboard;
 using Jobby.Persistence.Concrets;
 using Jobby.Persistence.Context;
 using Jobby.Persistence.Repositories;
+using Jobby.Persistence.Repositories.Dashboard;
 using Jobby.Persistence.Services.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -51,6 +53,8 @@ namespace Jobby.Persistence
             services.AddScoped<IClaimManager, ClaimManager>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<ILocalStorage, LocalStorage>();
+
+            services.AddScoped<IAdminDashboardReadRepository, AdminDashboardReadRepository>();
         }
     }
 }

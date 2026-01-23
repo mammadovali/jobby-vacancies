@@ -1,6 +1,5 @@
 ﻿using Jobby.Application.Exceptions;
 using Jobby.Application.Features.Commands.Applicant.DTOs;
-using Jobby.Application.Repositories;
 using Jobby.Application.Repositories.Applicant;
 using Jobby.Application.Repositories.Question;
 using Jobby.Domain.Entities.ApplicantAggregate;
