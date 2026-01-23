@@ -2,6 +2,9 @@
 using Jobby.Application.Features.Commands.Applicant.FinishTest;
 using Jobby.Application.Features.Commands.Applicant.StartTest;
 using Jobby.Application.Features.Commands.Applicant.SubmitAnswer;
+using Jobby.Application.Features.Queries.Applicant.GetTop;
+using Jobby.Application.Features.Queries.Vacancy.GetTop;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jobby.WebApi.Controllers
@@ -33,6 +36,14 @@ namespace Jobby.WebApi.Controllers
         public async Task<IActionResult> FinishTest([FromBody] FinishTestCommand command)
         {
             var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("top")]
+        public async Task<IActionResult> GetTopApplicants(int topCount)
+        {
+            var result = await Mediator.Send(new GetTopApplicantsQuery(topCount));
             return Ok(result);
         }
     }

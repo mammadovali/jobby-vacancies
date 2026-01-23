@@ -1,4 +1,5 @@
-﻿using Jobby.Application.Features.Queries.Category.DTOs;
+﻿using Jobby.Application.Features.Queries.Applicant.DTOs;
+using Jobby.Application.Features.Queries.Category.DTOs;
 using Jobby.Application.Repositories.Dashboard;
 using Jobby.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -41,5 +42,34 @@ namespace Jobby.Persistence.Repositories.Dashboard
             .OrderByDescending(x => x.SuccessRate)
             .ToListAsync();
         }
+
+        public async Task<List<TopApplicantDto>> GetTopApplicantsAsync(int topCount)
+        {
+            var query =
+                from tr in _context.TestResults
+                join a in _context.Applicants on tr.ApplicantId equals a.Id
+                join v in _context.Vacancies on a.VacancyId equals v.Id
+                join c in _context.Categories on v.CategoryId equals c.Id
+                where !a.IsDeleted && !v.IsDeleted && !c.IsDeleted
+                orderby tr.ScorePercent descending
+                select new TopApplicantDto
+                {
+                    ApplicantId = a.Id,
+                    FullName = a.FirstName + " " + a.LastName,
+                    Email = a.Email,
+                    VacancyTitle = v.Title,
+                    VacancyId = v.Id,
+                    CategoryName = c.Name,
+                    CategoryId = c.Id,
+                    ScorePercent = tr.ScorePercent,
+                    CompletedAt = tr.CompletedAt
+                };
+
+            return await query
+                .Take(topCount)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
     }
 }
