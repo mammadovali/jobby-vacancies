@@ -32,12 +32,6 @@ namespace Jobby.Application.Features.Queries.Applicant.GetAll
 
             query = query.ApplySortingAndFiltering(request.ColumnName, request.OrderBy, request.FilterValue);
 
-            int totalCount = await query.CountAsync(cancellationToken);
-
-            int totalPage = request.PageSize != null
-                ? (int)Math.Ceiling(totalCount / (double)request.PageSize)
-                : 1;
-
             if (request.PageNumber != null && request.PageSize != null)
             {
                 query = query
@@ -59,12 +53,16 @@ namespace Jobby.Application.Features.Queries.Applicant.GetAll
                 })
                .ToListAsync(cancellationToken);
 
+
+            int totalPage = request.PageSize != null
+                ? (int)Math.Ceiling(data.Count / (double)request.PageSize)
+                : 1;
+
             return new AllDto<ApplicantListDto>
             {
                 Data = data,
-                TotalCount = totalCount,
-                TotalPage = (int)Math.Ceiling(
-                    totalCount / (decimal)request.PageSize)
+                TotalCount = data.Count,
+                TotalPage = totalPage
             };
         }
     }
