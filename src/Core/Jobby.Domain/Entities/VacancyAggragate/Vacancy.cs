@@ -16,6 +16,8 @@ namespace Jobby.Domain.Entities.VacancyAggragate
 
         public ICollection<QuestionAggregate.Question> Questions { get; private set; } = new List<QuestionAggregate.Question>();
 
+        public ICollection<ApplicantAggregate.Applicant> Applicants { get; private set; } = new List<ApplicantAggregate.Applicant>();
+
         protected Vacancy() { }
 
         public Vacancy(int categoryId, string title, string description, int createdById)

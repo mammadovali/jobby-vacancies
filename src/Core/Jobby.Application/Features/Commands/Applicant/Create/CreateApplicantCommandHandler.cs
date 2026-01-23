@@ -30,7 +30,7 @@ namespace Jobby.Application.Features.Commands.Applicant.Create
         public async Task<ApplicantCreateDto> Handle( CreateApplicantCommand request, CancellationToken cancellationToken)
         {
             var vacancy = await _vacancyReadRepository
-                .GetByIdAsync(request.VacancyId);
+                .GetByIdAsync(request.VacancyId, q => q.Include(v => v.Questions));
 
             if (vacancy == null || !vacancy.IsActive)
                 throw new BadRequestException("Vacansiya tapılmadı");
@@ -58,7 +58,8 @@ namespace Jobby.Application.Features.Commands.Applicant.Create
 
             return new ApplicantCreateDto
             {
-                Id = applicant.Id
+                Id = applicant.Id,
+                TotalQuestions = vacancy.Questions?.Count ?? 0
             };
         }
     }

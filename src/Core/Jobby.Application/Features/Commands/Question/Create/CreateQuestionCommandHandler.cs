@@ -12,15 +12,18 @@ namespace Jobby.Application.Features.Commands.Question.Create
     public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionCommand, ResponseDto>
     {
         private readonly IQuestionWriteRepository _questionWriteRepository;
+        private readonly IQuestionReadRepository _questionReadRepository;
         private readonly IVacancyReadRepository _vacancyReadRepository;
         private readonly IUserManager _userManager;
 
         public CreateQuestionCommandHandler(
             IQuestionWriteRepository questionWriteRepository,
+            IQuestionReadRepository questionReadRepository,
             IVacancyReadRepository vacancyReadRepository,
             IUserManager userManager)
         {
             _questionWriteRepository = questionWriteRepository;
+            _questionReadRepository = questionReadRepository;
             _vacancyReadRepository = vacancyReadRepository;
             _userManager = userManager;
         }
@@ -30,10 +33,16 @@ namespace Jobby.Application.Features.Commands.Question.Create
             int userId = _userManager.GetCurrentUserId();
 
             var vacancyExists = await _vacancyReadRepository.Table.AnyAsync(
-                    v => v.Id == request.VacancyId && !v.IsDeleted);
+                    v => v.Id == request.VacancyId && !v.IsDeleted, cancellationToken);
 
             if (!vacancyExists)
-                throw new NotFoundException("Vacancy tapılmadı");
+                throw new NotFoundException("Vakansiya tapılmadı");
+
+            var orderExists = await _questionReadRepository.Table.AnyAsync(
+                q => q.VacancyId == request.VacancyId && q.Order == request.Order && !q.IsDeleted, cancellationToken);
+
+            if (orderExists)
+                throw new BusinessException("Bu sıra nömrəsi artıq mövcuddur");
 
             var question = new Domain.Entities.QuestionAggregate.Question(
                 request.VacancyId,
@@ -52,8 +61,6 @@ namespace Jobby.Application.Features.Commands.Question.Create
                     )
                 );
             }
-
-            question.IsValid();
 
             if (!question.IsValid())
                 throw new BusinessException("Invalid question configuration");

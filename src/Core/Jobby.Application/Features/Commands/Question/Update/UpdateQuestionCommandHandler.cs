@@ -29,11 +29,26 @@ namespace Jobby.Application.Features.Commands.Question.Update
             int userId = _userManager.GetCurrentUserId();
             var question = await _questionReadRepository.GetByIdAsync(
                 request.Id,
-                include => include.Include(q => q.Options)
+                include => include
+                .Include(q => q.Options)
+                .Include(q => q.ApplicantAnswers)
             );
 
             if (question == null || question.IsDeleted)
                 throw new BusinessException("Sual tapılmadı");
+
+            if (question.HasAnswers())
+                throw new BusinessException("Bu suala artıq cavab verilib. Dəyişiklik etmək mümkün deyil");
+
+            var orderExists = await _questionReadRepository.Table.AnyAsync(
+                q => q.VacancyId == question.VacancyId
+                     && q.Order == request.Order
+                     && !q.IsDeleted
+                     && q.Id != request.Id,
+                cancellationToken);
+
+            if (orderExists)
+                throw new BusinessException("Bu sıra nömrəsi artıq mövcuddur");
 
             question.Update(request.Text, request.Order, userId);
 
@@ -53,6 +68,7 @@ namespace Jobby.Application.Features.Commands.Question.Update
             if (!question.IsValid())
                 throw new BusinessException("Invalid question configuration");
 
+            _questionWriteRepository.Update(question);
             await _questionWriteRepository.SaveAsync();
 
             return new ResponseDto

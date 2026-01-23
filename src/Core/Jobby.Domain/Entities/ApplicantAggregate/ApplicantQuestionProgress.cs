@@ -21,7 +21,7 @@ namespace Jobby.Domain.Entities.ApplicantAggregate
             ApplicantId = applicantId;
             QuestionId = questionId;
             QuestionStartedAt = DateTime.UtcNow;
-            QuestionExpiresAt = QuestionStartedAt.AddSeconds(60);
+            QuestionExpiresAt = QuestionStartedAt.AddSeconds(70);
             IsAnswered = false;
         }
 

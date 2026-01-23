@@ -33,6 +33,13 @@ namespace Jobby.Persistence.Repositories
                 query = include(query);
             return query;
         }
+        public IQueryable<T> GetWhereSimple(Expression<Func<T, bool>> predicate, bool tracking = false)
+        {
+            var query = Table.Where(predicate);
+            if (!tracking)
+                query = query.AsNoTracking();
+            return query;
+        }
         public async Task<T> GetSingleAsync(Expression<Func<T, bool>> method, Func<IQueryable<T>, IQueryable<T>> include = null, bool tracking = true)
         {
             var query = Table.AsQueryable();

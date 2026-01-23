@@ -3,6 +3,7 @@ using Jobby.Application.Features.Commands.Vacancy.Delete;
 using Jobby.Application.Features.Commands.Vacancy.Update;
 using Jobby.Application.Features.Queries.Vacancy.GetAll;
 using Jobby.Application.Features.Queries.Vacancy.GetById;
+using Jobby.Application.Features.Queries.Vacancy.GetTop;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,5 +50,13 @@ namespace Jobby.WebApi.Controllers
             var response = await Mediator.Send(new DeleteVacancyCommand(id));
             return Ok(response);
         }
+
+        [HttpGet("top")]
+        public async Task<IActionResult> GetTopVacancies(int topCountPerCategory)
+        {
+            var result = await Mediator.Send(new GetTopVacanciesQuery(topCountPerCategory));
+            return Ok(result);
+        }
+
     }
 }

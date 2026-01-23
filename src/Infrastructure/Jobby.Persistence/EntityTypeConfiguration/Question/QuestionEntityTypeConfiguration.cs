@@ -27,7 +27,15 @@ namespace Jobby.Persistence.EntityTypeConfiguration.Question
                    .HasForeignKey(o => o.QuestionId)
                    .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasMany(q => q.ApplicantAnswers)
+                   .WithOne(o => o.Question)
+                   .HasForeignKey(o => o.QuestionId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
             builder.Navigation(q => q.Options)
+                   .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+            builder.Navigation(q => q.ApplicantAnswers)
                    .UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }

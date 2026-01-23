@@ -16,7 +16,7 @@ namespace Jobby.Persistence.EntityTypeConfiguration.Applicant
             builder.Property(x => x.Phone).IsRequired().HasMaxLength(50);
 
             builder.HasOne(x => x.Vacancy)
-                .WithMany()
+                .WithMany(v => v.Applicants)
                 .HasForeignKey(x => x.VacancyId)
                 .OnDelete(DeleteBehavior.Restrict);
 

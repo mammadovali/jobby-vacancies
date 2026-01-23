@@ -34,7 +34,8 @@ namespace Jobby.Application.Features.Commands.Applicant.StartTest
 
         public async Task<QuestionApplicantDto> Handle(StartTestCommand request, CancellationToken cancellationToken)
         {
-            var applicant = await _applicantReadRepository.GetByIdAsync(request.ApplicantId);
+            var applicant = await _applicantReadRepository.GetByIdAsync(request.ApplicantId,
+                i => i.Include(a => a.Vacancy).ThenInclude(v => v.Questions));
 
             if (applicant == null)
                 throw new NotFoundException("Namizəd tapılmadı");
@@ -65,6 +66,7 @@ namespace Jobby.Application.Features.Commands.Applicant.StartTest
             if (questionDto.TimeLeftSeconds < 0)
                 questionDto.TimeLeftSeconds = 0;*/
             questionDto.TimeLeftSeconds = 60;
+            questionDto.TotalQuestions = applicant.Vacancy.Questions?.Count ?? 0;
 
             return questionDto;
         }

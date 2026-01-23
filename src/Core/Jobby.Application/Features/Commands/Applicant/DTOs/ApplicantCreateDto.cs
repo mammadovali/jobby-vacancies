@@ -3,5 +3,6 @@
     public class ApplicantCreateDto
     {
         public int Id { get; set; }
+        public int TotalQuestions { get; set; }
     }
 }

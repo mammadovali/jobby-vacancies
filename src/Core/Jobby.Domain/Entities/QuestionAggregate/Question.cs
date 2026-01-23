@@ -1,4 +1,5 @@
-﻿using Jobby.Domain.Entities.Common;
+﻿using Jobby.Domain.Entities.ApplicantAggregate;
+using Jobby.Domain.Entities.Common;
 using Jobby.Domain.Entities.Identity;
 using Jobby.Domain.Entities.VacancyAggragate;
 
@@ -15,6 +16,9 @@ namespace Jobby.Domain.Entities.QuestionAggregate
         public IReadOnlyCollection<QuestionOption> Options => _options;
         private readonly List<QuestionOption> _options = new();
 
+        public IReadOnlyCollection<ApplicantAnswer> ApplicantAnswers => _applicantAnswers;
+        private readonly List<ApplicantAnswer> _applicantAnswers = new();
+
         protected Question() { }
 
         public Question(int vacancyId, string text, int order, int createdById)
@@ -30,6 +34,11 @@ namespace Jobby.Domain.Entities.QuestionAggregate
             Text = text;
             Order = order;
             SetEditFields(updatedById);
+        }
+
+        public bool HasAnswers()
+        {
+            return _applicantAnswers.Any();
         }
 
         public void AddOption(QuestionOption option)

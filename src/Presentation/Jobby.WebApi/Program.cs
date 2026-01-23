@@ -201,7 +201,6 @@ app.UseSwaggerUI(c =>
     c.DocExpansion(DocExpansion.List);
 });
 
-
 app.Use(async (context, next) =>
 {
     context.Response.Headers["Cache-Control"] = "no-store, no-cache, must-revalidate";

@@ -51,6 +51,9 @@ namespace Jobby.Application.Features.Commands.Applicant.SubmitAnswer
             // 2️. If the progress is expired, we do not check the answer
             bool isExpired = progress.IsExpired();
 
+            if (isExpired)
+                throw new BusinessException("Sual üçün təyin edilən vaxt artıq bitib");
+
             bool isCorrect = false;
 
             if (!isExpired && request.QuestionOptionId.HasValue)
@@ -64,6 +67,7 @@ namespace Jobby.Application.Features.Commands.Applicant.SubmitAnswer
 
                 isCorrect = option.IsCorrect;
             }
+
 
             // 3️. Write the answer
             var answer = new ApplicantAnswer(

@@ -21,8 +21,6 @@ namespace Jobby.Persistence.EntityTypeConfiguration.Vacancy
                    .WithMany(c => c.Vacancies)
                    .HasForeignKey(v => v.CategoryId)
                    .OnDelete(DeleteBehavior.Cascade);
-
-            //builder.HasIndex(v => new { v.CategoryId, v.IsActive });
         }
     }
 }
