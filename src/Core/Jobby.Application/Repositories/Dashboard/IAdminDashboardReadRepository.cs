@@ -7,5 +7,6 @@ namespace Jobby.Application.Repositories.Dashboard
     {
         Task<List<CategorySuccessRateDto>> GetCategorySuccessRatesAsync();
         Task<List<TopApplicantDto>> GetTopApplicantsAsync(int topCount);
+        IQueryable<Domain.Entities.ApplicantAggregate.Applicant> GetApplicantsQueryable(); 
     }
 }

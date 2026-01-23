@@ -71,5 +71,14 @@ namespace Jobby.Persistence.Repositories.Dashboard
                 .ToListAsync();
         }
 
+        public IQueryable<Domain.Entities.ApplicantAggregate.Applicant> GetApplicantsQueryable()
+        {
+            return _context.Applicants
+                .AsNoTracking()
+                .Include(a => a.TestResults)
+                .Include(a => a.Vacancy)
+                    .ThenInclude(v => v.Category)
+                .Where(a => !a.IsDeleted && a.TestResults.Any());
+        }
     }
 }
