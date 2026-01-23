@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Jobby.Domain\Jobby.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Queries\Applicant\GetAll\" />
+  </ItemGroup>
+
 </Project>

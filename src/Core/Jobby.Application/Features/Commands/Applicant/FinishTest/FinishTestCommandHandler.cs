@@ -48,12 +48,12 @@ namespace Jobby.Application.Features.Commands.Applicant.FinishTest
 
             
             var totalQuestions = await _questionReadRepo
-                .GetWhere(q => q.VacancyId == applicant.VacancyId)
+                .GetWhere(q => q.VacancyId == applicant.VacancyId && !q.IsDeleted)
                 .CountAsync(q => q.VacancyId == applicant.VacancyId);
 
             // 2️. Get Answers
             var answers = await _answerReadRepo
-                .GetWhere(a => a.ApplicantId == request.ApplicantId)
+                .GetWhere(a => a.ApplicantId == request.ApplicantId && !a.IsDeleted)
                 .ToListAsync(cancellationToken);
 
             int correctAnswers = answers.Count(a => a.IsCorrect);

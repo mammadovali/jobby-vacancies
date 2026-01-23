@@ -124,7 +124,7 @@ namespace Jobby.Application.Features.Commands.Applicant.SubmitAnswer
                 return null;
 
             var answeredQuestionIds = _answerReadRepo
-                .GetWhere(a => a.ApplicantId == applicantId)
+                .GetWhere(a => a.ApplicantId == applicantId && !a.IsDeleted)
                 .Select(a => a.QuestionId);
 
             return await _questionReadRepo
