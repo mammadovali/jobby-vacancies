@@ -11,7 +11,6 @@
         public string CategoryName { get; set; }
         public int CategoryId { get; set; }
         public decimal ScorePercent { get; set; }
-        public bool IsFinishedTest { get; set; }
 
         public DateTime AppliedDate { get; set; }
     }
