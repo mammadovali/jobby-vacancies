@@ -42,7 +42,8 @@ namespace Jobby.Application.Features.Queries.Applicant.GetAll
             var data = await query.SelectMany(a => a.TestResults
                 .Where(tr => tr.ApplicantId == a.Id), (a, tr) => new ApplicantListDto
                 {
-                    FullName = a.FirstName + " " + a.LastName,
+                    FirstName = a.FirstName,
+                    LastName = a.LastName,
                     Email = a.Email,
                     VacancyTitle = a.Vacancy.Title,
                     VacancyId = a.Vacancy.Id,
