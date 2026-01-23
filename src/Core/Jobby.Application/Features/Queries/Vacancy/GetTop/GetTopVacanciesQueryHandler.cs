@@ -18,6 +18,8 @@ namespace Jobby.Application.Features.Queries.Vacancy.GetTop
             GetTopVacanciesQuery request,
             CancellationToken cancellationToken)
         {
+
+            var topCount = request.TopCount <= 0 ? 5 : request.TopCount;
             var query = await _categoryRead
                 .GetWhereSimple(c => c.Vacancies.Any(v => v.IsActive && !v.IsDeleted))
                 .Select(c => new TopVacanciesByCategoryDto

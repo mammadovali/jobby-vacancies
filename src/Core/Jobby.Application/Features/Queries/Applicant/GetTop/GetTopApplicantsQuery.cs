@@ -5,7 +5,7 @@ namespace Jobby.Application.Features.Queries.Applicant.GetTop
 {
     public class GetTopApplicantsQuery : IRequest<List<TopApplicantDto>>
     {
-        public int TopCount { get; set; } = 5;
+        public int TopCount { get; set; }
 
         public GetTopApplicantsQuery(int topCount)
         {

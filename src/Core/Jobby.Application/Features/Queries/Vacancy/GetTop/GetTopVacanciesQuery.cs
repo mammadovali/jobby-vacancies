@@ -5,9 +5,9 @@ namespace Jobby.Application.Features.Queries.Vacancy.GetTop
 {
     public class GetTopVacanciesQuery : IRequest<List<TopVacanciesByCategoryDto>>
     {
-        public int TopCount { get; }
+        public int TopCount { get; set; }
 
-        public GetTopVacanciesQuery(int topCount = 5)
+        public GetTopVacanciesQuery(int topCount)
         {
             TopCount = topCount;
         }

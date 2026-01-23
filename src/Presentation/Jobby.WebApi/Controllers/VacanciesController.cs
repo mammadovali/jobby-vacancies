@@ -51,6 +51,7 @@ namespace Jobby.WebApi.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpGet("top")]
         public async Task<IActionResult> GetTopVacancies(int topCount)
         {
