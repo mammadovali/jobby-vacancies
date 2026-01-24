@@ -6,10 +6,8 @@ using Jobby.Application.Features.Queries.Applicant.DownloadCv;
 using Jobby.Application.Features.Queries.Applicant.GetAll;
 using Jobby.Application.Features.Queries.Applicant.GetById;
 using Jobby.Application.Features.Queries.Applicant.GetTop;
-using Jobby.Application.Features.Queries.Vacancy.GetTop;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Jobby.WebApi.Controllers
 {
