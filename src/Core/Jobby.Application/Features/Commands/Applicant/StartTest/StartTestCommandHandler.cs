@@ -66,7 +66,7 @@ namespace Jobby.Application.Features.Commands.Applicant.StartTest
             if (questionDto.TimeLeftSeconds < 0)
                 questionDto.TimeLeftSeconds = 0;*/
             questionDto.TimeLeftSeconds = 60;
-            questionDto.TotalQuestions = applicant.Vacancy.Questions?.Count ?? 0;
+            questionDto.TotalQuestions = applicant.Vacancy.Questions?.Where(q => !q.IsDeleted).Count() ?? 0;
 
             return questionDto;
         }
