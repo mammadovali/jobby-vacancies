@@ -52,16 +52,6 @@ namespace Jobby.Application.Features.Commands.Question.Update
 
                 if (newOrder < 1 || newOrder > totalQuestions)
                     throw new BusinessException($"Sıra nömrəsi 1 ilə {totalQuestions} arasında olmalıdır");
-
-                var orderExists = await _questionReadRepository.Table.AnyAsync(
-                    q => q.VacancyId == vacancyId
-                         && q.Order == newOrder
-                         && !q.IsDeleted
-                         && q.Id != request.Id,
-                    cancellationToken);
-
-                if (orderExists)
-                    throw new BusinessException("Bu sıra nömrəsi artıq mövcuddur");
             }
 
             question.Update(request.Text, newOrder, userId);
@@ -93,7 +83,7 @@ namespace Jobby.Application.Features.Commands.Question.Update
                 {
                     foreach (var q in questionsToUpdate.Where(q => q.Order > oldOrder && q.Order <= newOrder))
                     {
-                        q.Reorder(q.Order -1, userId);
+                        q.Reorder(q.Order - 1, userId);
                     }
                 }
                 else
