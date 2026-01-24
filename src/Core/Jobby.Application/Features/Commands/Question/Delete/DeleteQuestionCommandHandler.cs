@@ -29,6 +29,10 @@ namespace Jobby.Application.Features.Commands.Question.Delete
             if (question is null)
                 throw new NotFoundException("Sual tapılmadı");
 
+            
+            var vacancyId = question.VacancyId;
+            var deletedOrder = question.Order;
+
             question.IsDeleted = true;
             question.SetEditFields(userId);
 
@@ -36,6 +40,18 @@ namespace Jobby.Application.Features.Commands.Question.Delete
             {
                 option.IsDeleted = true;
                 option.SetEditFields(userId);
+            }
+
+            var questionsToUpdate = await _readRepository
+                .GetWhere(q => q.VacancyId == vacancyId &&
+                            q.Order > deletedOrder &&
+                            !q.IsDeleted &&
+                            q.Id != request.Id)
+                .ToListAsync(cancellationToken);
+
+            foreach (var q in questionsToUpdate)
+            {
+                q.Reorder(q.Order - 1, userId);
             }
 
             await _writeRepository.SaveAsync();

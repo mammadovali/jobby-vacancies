@@ -27,11 +27,12 @@ namespace Jobby.Application.Features.Commands.Question.Update
         public async Task<ResponseDto> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
         {
             int userId = _userManager.GetCurrentUserId();
+
             var question = await _questionReadRepository.GetByIdAsync(
                 request.Id,
                 include => include
-                .Include(q => q.Options)
-                .Include(q => q.ApplicantAnswers)
+                    .Include(q => q.Options)
+                    .Include(q => q.ApplicantAnswers)
             );
 
             if (question == null || question.IsDeleted)
@@ -40,26 +41,38 @@ namespace Jobby.Application.Features.Commands.Question.Update
             if (question.HasAnswers())
                 throw new BusinessException("Bu suala artıq cavab verilib. Dəyişiklik etmək mümkün deyil");
 
-            var orderExists = await _questionReadRepository.Table.AnyAsync(
-                q => q.VacancyId == question.VacancyId
-                     && q.Order == request.Order
-                     && !q.IsDeleted
-                     && q.Id != request.Id,
-                cancellationToken);
+            var oldOrder = question.Order;
+            var newOrder = request.Order;
+            var vacancyId = question.VacancyId;
 
-            if (orderExists)
-                throw new BusinessException("Bu sıra nömrəsi artıq mövcuddur");
+            if (oldOrder != newOrder)
+            {
+                var totalQuestions = await _questionReadRepository.Table
+                    .CountAsync(q => q.VacancyId == vacancyId && !q.IsDeleted, cancellationToken);
 
-            question.Update(request.Text, request.Order, userId);
+                if (newOrder < 1 || newOrder > totalQuestions)
+                    throw new BusinessException($"Sıra nömrəsi 1 ilə {totalQuestions} arasında olmalıdır");
+
+                var orderExists = await _questionReadRepository.Table.AnyAsync(
+                    q => q.VacancyId == vacancyId
+                         && q.Order == newOrder
+                         && !q.IsDeleted
+                         && q.Id != request.Id,
+                    cancellationToken);
+
+                if (orderExists)
+                    throw new BusinessException("Bu sıra nömrəsi artıq mövcuddur");
+            }
+
+            question.Update(request.Text, newOrder, userId);
 
             question.Options.ToList().ForEach(o => question.RemoveOption(o));
-
             foreach (var option in request.Options)
             {
                 question.AddOption(
                     new QuestionOption(
                         option.Text,
-                        option.IsCorrect, 
+                        option.IsCorrect,
                         userId
                     )
                 );
@@ -67,6 +80,30 @@ namespace Jobby.Application.Features.Commands.Question.Update
 
             if (!question.IsValid())
                 throw new BusinessException("Invalid question configuration");
+
+            if (oldOrder != newOrder)
+            {
+                var questionsToUpdate = await _questionReadRepository
+                    .GetWhere(q => q.VacancyId == vacancyId &&
+                                q.Id != request.Id &&
+                                !q.IsDeleted)
+                    .ToListAsync(cancellationToken);
+
+                if (newOrder > oldOrder)
+                {
+                    foreach (var q in questionsToUpdate.Where(q => q.Order > oldOrder && q.Order <= newOrder))
+                    {
+                        q.Reorder(q.Order -1, userId);
+                    }
+                }
+                else
+                {
+                    foreach (var q in questionsToUpdate.Where(q => q.Order >= newOrder && q.Order < oldOrder))
+                    {
+                        q.Reorder(q.Order + 1, userId);
+                    }
+                }
+            }
 
             _questionWriteRepository.Update(question);
             await _questionWriteRepository.SaveAsync();

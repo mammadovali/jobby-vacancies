@@ -38,11 +38,15 @@ namespace Jobby.Application.Features.Commands.Question.Create
             if (!vacancyExists)
                 throw new NotFoundException("Vakansiya tapılmadı");
 
-            var orderExists = await _questionReadRepository.Table.AnyAsync(
-                q => q.VacancyId == request.VacancyId && q.Order == request.Order && !q.IsDeleted, cancellationToken);
+            var totalQuestions = await _questionReadRepository.Table
+            .CountAsync(q => q.VacancyId == request.VacancyId && !q.IsDeleted, cancellationToken);
 
-            if (orderExists)
-                throw new BusinessException("Bu sıra nömrəsi artıq mövcuddur");
+
+            var expectedOrder = totalQuestions + 1;
+
+            if (request.Order != expectedOrder)
+                throw new BusinessException($"Yeni sual yalnız {expectedOrder} sıra nömrəsi ilə əlavə edilə bilər");
+
 
             var question = new Domain.Entities.QuestionAggregate.Question(
                 request.VacancyId,

@@ -56,6 +56,12 @@ namespace Jobby.Domain.Entities.QuestionAggregate
             return _options.Count >= 4
                 && _options.Count(o => o.IsCorrect) == 1;
         }
+
+        public void Reorder(int newOrder, int updatedById)
+        {
+            Order = newOrder;
+            SetEditFields(updatedById);
+        }
     }
 
 }
