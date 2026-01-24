@@ -2,6 +2,7 @@
 using Jobby.Application.Features.Commands.Applicant.FinishTest;
 using Jobby.Application.Features.Commands.Applicant.StartTest;
 using Jobby.Application.Features.Commands.Applicant.SubmitAnswer;
+using Jobby.Application.Features.Queries.Applicant.DownloadCv;
 using Jobby.Application.Features.Queries.Applicant.GetAll;
 using Jobby.Application.Features.Queries.Applicant.GetById;
 using Jobby.Application.Features.Queries.Applicant.GetTop;
@@ -64,6 +65,15 @@ namespace Jobby.WebApi.Controllers
         {
             var result = await Mediator.Send(new GetApplicantByIdQuery(id));
             return Ok(result);
+        }
+
+
+        [Authorize]
+        [HttpGet("{id}/download-cv")]
+        public async Task<IActionResult> DownloadCv(int id)
+        {
+            var result = await Mediator.Send(new DownloadCvQuery(id));
+            return File(result.FileBytes, result.ContentType, result.FileName);
         }
     }
 }
