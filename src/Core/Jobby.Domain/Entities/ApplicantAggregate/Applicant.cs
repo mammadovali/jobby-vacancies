@@ -14,6 +14,7 @@ namespace Jobby.Domain.Entities.ApplicantAggregate
         public string? Phone { get; private set; }
         public string CvFilePath { get; private set; }
         public ICollection<TestResult> TestResults { get; private set; } = new List<TestResult>();
+        public ICollection<ApplicantAnswer> ApplicantAnswers { get; private set; } = new List<ApplicantAnswer>();
 
         public Vacancy Vacancy { get; private set; }
 

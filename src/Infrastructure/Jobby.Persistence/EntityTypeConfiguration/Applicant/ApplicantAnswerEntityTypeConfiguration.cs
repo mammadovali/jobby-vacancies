@@ -13,12 +13,12 @@ namespace Jobby.Persistence.EntityTypeConfiguration.Applicant
             builder.HasKey(x => x.Id);
 
             builder.HasOne(x => x.Applicant)
-                   .WithMany()
+                   .WithMany(a => a.ApplicantAnswers)
                    .HasForeignKey(x => x.ApplicantId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.Question)
-                   .WithMany()
+                   .WithMany(a => a.ApplicantAnswers)
                    .HasForeignKey(x => x.QuestionId)
                    .OnDelete(DeleteBehavior.Restrict);
 

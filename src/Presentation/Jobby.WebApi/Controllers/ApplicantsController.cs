@@ -3,10 +3,12 @@ using Jobby.Application.Features.Commands.Applicant.FinishTest;
 using Jobby.Application.Features.Commands.Applicant.StartTest;
 using Jobby.Application.Features.Commands.Applicant.SubmitAnswer;
 using Jobby.Application.Features.Queries.Applicant.GetAll;
+using Jobby.Application.Features.Queries.Applicant.GetById;
 using Jobby.Application.Features.Queries.Applicant.GetTop;
 using Jobby.Application.Features.Queries.Vacancy.GetTop;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Jobby.WebApi.Controllers
 {
@@ -53,6 +55,14 @@ namespace Jobby.WebApi.Controllers
         public async Task<IActionResult> Get([FromQuery] GetApplicantsQuery query)
         {
             var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await Mediator.Send(new GetApplicantByIdQuery(id));
             return Ok(result);
         }
     }

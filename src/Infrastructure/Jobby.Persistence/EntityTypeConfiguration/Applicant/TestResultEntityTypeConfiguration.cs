@@ -18,6 +18,11 @@ namespace Jobby.Persistence.EntityTypeConfiguration.Applicant
             builder.Property(x => x.WrongAnswers).IsRequired();
             builder.Property(x => x.CompletedAt).IsRequired();
 
+            builder.HasOne(x => x.Applicant)
+                .WithMany(a => a.TestResults)
+                .HasForeignKey(x => x.ApplicantId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Property(x => x.ScorePercent)
                    .HasPrecision(5, 2);
 

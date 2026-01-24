@@ -80,5 +80,19 @@ namespace Jobby.Persistence.Repositories.Dashboard
                     .ThenInclude(v => v.Category)
                 .Where(a => !a.IsDeleted && a.TestResults.Any());
         }
+
+        public IQueryable<Domain.Entities.ApplicantAggregate.Applicant> GetApplicantDetailQueryable()
+        {
+            return _context.Applicants
+                .AsNoTracking()
+                .Include(a => a.Vacancy)
+                    .ThenInclude(v => v.Category)
+                .Include(a => a.TestResults)
+                .Include(a => a.ApplicantAnswers)
+                    .ThenInclude(aa => aa.Question)
+                        .ThenInclude(q => q.Options)
+                .Where(a => !a.IsDeleted);
+        }
+
     }
 }
